@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Exclude App_Data folder
+ConsoleApp/App_Data/
