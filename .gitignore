@@ -1,0 +1,22 @@
+# Visual Studio / Rider / VS Code
+.vs/
+**/.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build directories
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node / Python / others (leave minimal)
+# node_modules/
+# __pycache__/
