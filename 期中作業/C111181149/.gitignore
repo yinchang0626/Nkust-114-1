@@ -1,0 +1,11 @@
+# Build outputs
+bin/
+obj/
+
+# 忽略 App_Data 原始資料（使用者資料）
+App_Data/
+
+# 忽略 .vs, user settings
+.vs/
+*.user
+*.suo
