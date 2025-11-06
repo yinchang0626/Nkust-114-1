@@ -1,0 +1,82 @@
+{
+  "format": 1,
+  "restore": {
+    "d:\\BH\\makemoney\\Nkust-114-1\\期中作業\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj": {}
+  },
+  "projects": {
+    "d:\\BH\\makemoney\\Nkust-114-1\\期中作業\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj": {
+      "version": "25.2.0",
+      "restore": {
+        "projectUniqueName": "d:\\BH\\makemoney\\Nkust-114-1\\期中作業\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
+        "projectName": "WinFormsApp1",
+        "projectPath": "d:\\BH\\makemoney\\Nkust-114-1\\期中作業\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
+        "packagesPath": "C:\\Users\\hao\\.nuget\\packages\\",
+        "outputPath": "d:\\BH\\makemoney\\Nkust-114-1\\期中作業\\WinFormsApp1\\WinFormsApp1\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\hao\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows7.0": {
+            "targetAlias": "net8.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "dependencies": {
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.Windows.Forms.DataVisualization": {
+              "target": "Package",
+              "version": "[1.0.0-prerelease.20110.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
