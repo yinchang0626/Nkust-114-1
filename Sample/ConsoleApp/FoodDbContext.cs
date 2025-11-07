@@ -35,9 +35,9 @@ namespace ConsoleApp
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // 使用 LocalDB 連線字串
+                // 使用系統上存在的 LocalDB 執行個體 v11.0
                 optionsBuilder.UseSqlServer(
-                    @"Server=(localdb)\mssqllocaldb;Database=FoodNutritionDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+                    @"Server=(localdb)\v11.0;Database=FoodNutritionDb;Trusted_Connection=True;MultipleActiveResultSets=true"
                 );
             }
         }
