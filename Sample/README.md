@@ -2,13 +2,13 @@
 
 ## 專案說明
 
-這是一個 .NET 9.0 控制台應用程式，用於處理食品營養成分資料。
+這是一個 .NET 9.0 控制台應用程式，用於處理地震報告資料。
 
 ## 資料來源
 
-本專案需要使用政府開放資料平台提供的食品營養成分資料：
+本專案需要使用政府開放資料平台提供的顯著有感地震報告資料：
 
-**資料來源**：[食品營養成分資料庫 - 政府資料開放平臺](https://data.gov.tw/dataset/8543)
+**資料來源**：[顯著有感地震報告 - 政府資料開放平臺](https://data.gov.tw/dataset/6068)
 
 ### 資料準備
 
@@ -23,11 +23,8 @@
 
 ### 執行步驟
 
-1. **克隆專案**
-   ```bash
-   git clone https://github.com/yinchang0626/Nkust-114-1.git
-   cd Nkust-114-1
-   ```
+1. **專案**
+   
 
 2. **準備資料檔案**
    - 從 [政府開放資料平台](https://data.gov.tw/dataset/8543) 下載 JSON 格式的食品營養成分資料
@@ -53,13 +50,13 @@
 ## 專案結構
 
 ```
-Nkust-114-1/
-├── ConsoleApp/
-│   ├── ConsoleApp.csproj
+earthquake/
+├── ConsoleApp1/
+│   ├── ConsoleApp1.csproj
 │   ├── Program.cs
 │   ├── FoodInfo.cs
 │   └── App_Data/          # 資料檔案目錄（需手動建立）
-│       └── *.json         # 食品營養成分資料檔案
-├── NKUST114-1.sln
+│       └── *.json         # 顯著有感地震資料檔案
+├── ConsoleApp1.sln
 └── README.md
 ```
