@@ -1,0 +1,5 @@
+D:\BH\makemoney\Nkust-114-1\期中作業\ConsoleApp1\ConsoleApp1\obj\Debug\net8.0\ConsoleApp1.GeneratedMSBuildEditorConfig.editorconfig
+D:\BH\makemoney\Nkust-114-1\期中作業\ConsoleApp1\ConsoleApp1\obj\Debug\net8.0\ConsoleApp1.AssemblyInfoInputs.cache
+D:\BH\makemoney\Nkust-114-1\期中作業\ConsoleApp1\ConsoleApp1\obj\Debug\net8.0\ConsoleApp1.AssemblyInfo.cs
+D:\BH\makemoney\Nkust-114-1\期中作業\ConsoleApp1\ConsoleApp1\obj\Debug\net8.0\ConsoleApp1.csproj.CoreCompileInputs.cache
+D:\BH\makemoney\Nkust-114-1\期中作業\ConsoleApp1\ConsoleApp1\obj\Debug\net8.0\ConsoleApp1.sourcelink.json
