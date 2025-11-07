@@ -14,7 +14,7 @@ namespace ConsoleApp
 
             // 使用 AppDomain 獲取應用程式基礎目錄
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string jsonFilePath = Path.Combine(baseDirectory, "App_Data", "20_5.json");
+            string jsonFilePath = Path.Combine(baseDirectory, "App_Data", "aqx_p_432.json");
 
             Console.WriteLine($"嘗試讀取檔案: {jsonFilePath}");
 
@@ -33,13 +33,27 @@ namespace ConsoleApp
                 string jsonString = File.ReadAllText(jsonFilePath);
                 Console.WriteLine($"檔案大小: {new FileInfo(jsonFilePath).Length / 1024 / 1024:F2} MB");
 
-                // 反序列化 JSON 資料
+                // 反序列化 JSON 資料 -- 支援含根物件 (包含 records) 或直接為陣列的兩種情況
                 Console.WriteLine("正在進行反序列化...");
-                var foodInfoList = JsonSerializer.Deserialize<List<FoodInfo>>(jsonString);
+                List<FoodInfo>? foodInfoList = null;
+
+                using (JsonDocument doc = JsonDocument.Parse(jsonString))
+                {
+                    var root = doc.RootElement;
+
+                    if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("records", out var recordsElem))
+                    {
+                        foodInfoList = JsonSerializer.Deserialize<List<FoodInfo>>(recordsElem.GetRawText(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    }
+                    else if (root.ValueKind == JsonValueKind.Array)
+                    {
+                        foodInfoList = JsonSerializer.Deserialize<List<FoodInfo>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    }
+                }
 
                 if (foodInfoList != null && foodInfoList.Count > 0)
                 {
-                    Console.WriteLine($"成功反序列化 {foodInfoList.Count} 筆食品資料\n");
+                    Console.WriteLine($"成功反序列化 {foodInfoList.Count} 筆資料\n");
 
                     // 顯示前 10 筆資料以避免輸出過多
                     int displayCount = Math.Min(10, foodInfoList.Count);
@@ -49,13 +63,15 @@ namespace ConsoleApp
                     {
                         var foodInfo = foodInfoList[i];
                         Console.WriteLine($"第 {i + 1} 筆資料:");
-                        Console.WriteLine($"整合編號: {foodInfo.IntegratedNumber}");
-                        Console.WriteLine($"樣品名稱: {foodInfo.SampleName} ({foodInfo.SampleEnglishName})");
-                        Console.WriteLine($"分析項分類: {foodInfo.AnalysisCategory}");
-                        Console.WriteLine($"分析項: {foodInfo.AnalysisItem}");
-                        Console.WriteLine($"每100克含量: {foodInfo.ContentPer100g} {foodInfo.ContentUnit}");
-                        Console.WriteLine($"食品分類: {foodInfo.FoodCategory}");
-                        Console.WriteLine($"內容物描述: {foodInfo.ContentDescription}");
+                        Console.WriteLine($"測站名稱: {foodInfo.SampleName}");
+                        Console.WriteLine($"測站編號: {foodInfo.SampleEnglishName}");
+                        Console.WriteLine($"縣市: {foodInfo.FoodCategory}");
+                        Console.WriteLine($"狀態: {foodInfo.AnalysisCategory}");
+                        Console.WriteLine($"污染物: {foodInfo.AnalysisItem}");
+                        Console.WriteLine($"AQI: {foodInfo.ContentPer100g}");
+                        Console.WriteLine($"pm2.5: {foodInfo.Pm25}");
+                        Console.WriteLine($"座標: {foodInfo.Latitude}, {foodInfo.Longitude}");
+                        Console.WriteLine($"資料發布時間: {foodInfo.ContentDescription}");
                         Console.WriteLine(new string('-', 50));
                     }
 
@@ -110,14 +126,14 @@ namespace ConsoleApp
                                 .Select(f => new FoodInfoEntity
                                 {
                                     ContentPerUnitWeight = f.ContentPerUnitWeight,
-                                    IntegratedNumber = f.IntegratedNumber,
+                                    IntegratedNumber = f.IntegratedNumber ?? f.SampleEnglishName, // 若沒提供整合編號，使用 siteid
                                     AnalysisCategory = f.AnalysisCategory,
                                     SampleName = f.SampleName,
                                     ContentPer100g = f.ContentPer100g,
                                     ContentPerUnit = f.ContentPerUnit,
                                     StandardDeviation = f.StandardDeviation,
                                     UnitWeight = f.UnitWeight,
-                                    ContentUnit = f.ContentUnit,
+                                    ContentUnit = f.ContentUnit ?? "AQI",
                                     SampleCount = f.SampleCount,
                                     WasteRate = f.WasteRate,
                                     SampleEnglishName = f.SampleEnglishName,
