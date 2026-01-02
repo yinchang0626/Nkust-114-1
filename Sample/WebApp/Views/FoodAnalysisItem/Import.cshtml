@@ -1,0 +1,375 @@
+﻿@{
+    ViewData["Title"] = "食品分析項目資料匯入";
+}
+
+<div class="container mt-4">
+    <h1>食品分析項目資料匯入</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">單筆匯入</h5>
+                </div>
+                <div class="card-body">
+                    <p>選擇特定的食品，並選擇分析項目（可選擇全部），從原始 FoodInfo 資料中匯入對應的營養成分資料。</p>
+                    
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { id = "importForm" }))
+                    {
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="foodId" class="form-label">選擇食品 <span class="text-danger">*</span></label>
+                                @await Component.InvokeAsync("FoodDropdown", new { 
+                                    name = "foodId", 
+                                    includeAllOption = false, 
+                                    isRequired = true 
+                                })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="analysisItemId" class="form-label">選擇分析項目</label>
+                                @await Component.InvokeAsync("AnalysisItemDropdown", new { 
+                                    name = "analysisItemId", 
+                                    includeAllOption = true, 
+                                    isRequired = false,
+                                    id = "analysisItemSelect"
+                                })
+                                <div class="form-text">
+                                    <small class="text-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        選擇"全部"將匯入該食品的所有分析項目
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-download"></i> 執行匯入
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearForm()">清除選擇</button>
+                            </div>
+                        </div>
+                    }
+                    
+                    <div id="importResult" class="mt-3" style="display: none;">
+                        <div id="importAlert" class="alert" role="alert">
+                            <span id="importMessage"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">食品完整匯入</h5>
+                </div>
+                <div class="card-body">
+                    <p>選擇特定食品，自動匯入該食品的所有可用分析項目。</p>
+                    
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { id = "foodCompleteImportForm" }))
+                    {
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="foodCompleteId" class="form-label">選擇食品 <span class="text-danger">*</span></label>
+                                @await Component.InvokeAsync("FoodDropdown", new { 
+                                    name = "foodCompleteId", 
+                                    includeAllOption = false, 
+                                    isRequired = true 
+                                })
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-download"></i> 完整匯入該食品
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    <div id="foodCompleteImportResult" class="mt-3" style="display: none;">
+                        <div id="foodCompleteImportAlert" class="alert" role="alert">
+                            <span id="foodCompleteImportMessage"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">全系統批次匯入</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>注意：</strong>此操作會匯入所有可能的食品與分析項目組合，可能需要較長時間。
+                    </p>
+                    <button id="batchImportBtn" class="btn btn-success">
+                        <i class="fas fa-download"></i> 執行全系統批次匯入
+                    </button>
+                    
+                    <div id="batchImportResult" class="mt-3" style="display: none;">
+                        <div id="batchImportAlert" class="alert" role="alert">
+                            <span id="batchImportMessage"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">匯入說明</h6>
+                </div>
+                <div class="card-body">
+                    <h6>單筆匯入</h6>
+                    <ul class="small">
+                        <li><strong>必須選擇食品</strong></li>
+                        <li>分析項目可選擇特定項目或"全部"</li>
+                        <li>選擇"全部"會匯入該食品的所有分析項目</li>
+                        <li>適用於精確控制匯入內容</li>
+                    </ul>
+                    
+                    <h6>食品完整匯入</h6>
+                    <ul class="small">
+                        <li>選擇特定食品</li>
+                        <li>自動匯入該食品的所有分析項目</li>
+                        <li>會跳過已存在的關聯</li>
+                        <li>提供詳細的匯入統計</li>
+                    </ul>
+                    
+                    <h6>全系統批次匯入</h6>
+                    <ul class="small">
+                        <li>自動匯入所有可能的組合</li>
+                        <li>會跳過已存在的關聯</li>
+                        <li>適用於初始化大量資料</li>
+                        <li>執行時間較長，請耐心等候</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">快速連結</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+                            查看匯入結果
+                        </a>
+                        <a href="@Url.Action("Index", "Food")" class="btn btn-outline-secondary">
+                            管理食品資料
+                        </a>
+                        <a href="@Url.Action("Index", "AnalysisItem")" class="btn btn-outline-info">
+                            管理分析項目
+                        </a>
+                        <a href="@Url.Action("Index", "FoodInfo")" class="btn btn-outline-warning">
+                            原始資料
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // 單筆匯入
+    document.getElementById('importForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const foodId = document.querySelector('select[name="foodId"]').value;
+        const analysisItemId = document.querySelector('select[name="analysisItemId"]').value;
+        
+        if (!foodId) {
+            showImportResult(false, '請選擇食品');
+            return;
+        }
+        
+        // 顯示載入狀態
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 匯入中...';
+        submitBtn.disabled = true;
+        
+        // 根據是否選擇分析項目決定匯入模式
+        let importMode = analysisItemId && analysisItemId !== '' ? '單一分析項目' : '該食品的所有分析項目';
+        console.log('匯入模式:', importMode, 'FoodId:', foodId, 'AnalysisItemId:', analysisItemId);
+        
+        fetch('@Url.Action("ImportFromFoodInfo")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: `foodId=${foodId}&analysisItemId=${analysisItemId || ''}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            showImportResult(data.success, data.message);
+            if (data.success && data.recordId) {
+                // 單筆匯入成功，提供查看結果的連結
+                const resultDiv = document.getElementById('importMessage');
+                resultDiv.innerHTML += `<br><a href="@Url.Action("Details")/${data.recordId}" class="btn btn-sm btn-outline-primary mt-2">查看匯入結果</a>`;
+            } else if (data.success && data.importCount !== undefined) {
+                // 多筆匯入成功，顯示統計資訊
+                const resultDiv = document.getElementById('importMessage');
+                resultDiv.innerHTML += `<br><a href="@Url.Action("Index")" class="btn btn-sm btn-outline-primary mt-2">查看匯入列表</a>`;
+            }
+        })
+        .catch(error => {
+            showImportResult(false, '匯入過程發生錯誤：' + error.message);
+        })
+        .finally(() => {
+            // 恢復按鈕狀態
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+
+    // 食品完整匯入
+    document.getElementById('foodCompleteImportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const foodId = document.querySelector('select[name="foodCompleteId"]').value;
+        
+        if (!foodId) {
+            showFoodCompleteImportResult(false, '請選擇食品');
+            return;
+        }
+        
+        // 顯示載入狀態
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 匯入中...';
+        submitBtn.disabled = true;
+        
+        fetch('@Url.Action("ImportFromFoodInfo")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: `foodId=${foodId}&analysisItemId=`
+        })
+        .then(response => response.json())
+        .then(data => {
+            showFoodCompleteImportResult(data.success, data.message);
+            if (data.success) {
+                const resultDiv = document.getElementById('foodCompleteImportMessage');
+                resultDiv.innerHTML += `<br><a href="@Url.Action("Index", new { foodId = "__FOOD_ID__" })".replace("__FOOD_ID__", foodId)" class="btn btn-sm btn-outline-primary mt-2">查看該食品的匯入結果</a>`;
+            }
+        })
+        .catch(error => {
+            showFoodCompleteImportResult(false, '匯入過程發生錯誤：' + error.message);
+        })
+        .finally(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+    
+    // 批次匯入
+    document.getElementById('batchImportBtn').addEventListener('click', function() {
+        if (!confirm('確定要執行全系統批次匯入嗎？此操作可能需要較長時間。')) {
+            return;
+        }
+        
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 批次匯入中...';
+        this.disabled = true;
+        
+        fetch('@Url.Action("ImportAllFromFoodInfo")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            showBatchImportResult(data.success, data.message);
+        })
+        .catch(error => {
+            showBatchImportResult(false, '批次匯入過程發生錯誤：' + error.message);
+        })
+        .finally(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+        });
+    });
+    
+    function showImportResult(success, message) {
+        const resultDiv = document.getElementById('importResult');
+        const alertDiv = document.getElementById('importAlert');
+        const messageSpan = document.getElementById('importMessage');
+        
+        alertDiv.className = success ? 'alert alert-success' : 'alert alert-danger';
+        messageSpan.innerHTML = message;
+        resultDiv.style.display = 'block';
+    }
+
+    function showFoodCompleteImportResult(success, message) {
+        const resultDiv = document.getElementById('foodCompleteImportResult');
+        const alertDiv = document.getElementById('foodCompleteImportAlert');
+        const messageSpan = document.getElementById('foodCompleteImportMessage');
+        
+        alertDiv.className = success ? 'alert alert-success' : 'alert alert-danger';
+        messageSpan.innerHTML = message;
+        resultDiv.style.display = 'block';
+    }
+    
+    function showBatchImportResult(success, message) {
+        const resultDiv = document.getElementById('batchImportResult');
+        const alertDiv = document.getElementById('batchImportAlert');
+        const messageSpan = document.getElementById('batchImportMessage');
+        
+        alertDiv.className = success ? 'alert alert-success' : 'alert alert-danger';
+        messageSpan.innerHTML = message;
+        resultDiv.style.display = 'block';
+    }
+    
+    function clearForm() {
+        document.querySelector('select[name="foodId"]').value = '';
+        document.querySelector('select[name="analysisItemId"]').value = '';
+        document.querySelector('select[name="foodCompleteId"]').value = '';
+        document.getElementById('importResult').style.display = 'none';
+        document.getElementById('foodCompleteImportResult').style.display = 'none';
+    }
+
+    // 根據分析項目選擇狀態更新說明文字
+    function updateImportDescription() {
+        const analysisItemSelect = document.querySelector('select[name="analysisItemId"]');
+        if (analysisItemSelect) {
+            analysisItemSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                const descriptionText = selectedValue && selectedValue !== '' 
+                    ? '將匯入選中的單一分析項目' 
+                    : '將匯入該食品的所有分析項目';
+                
+                const form = document.getElementById('importForm');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const icon = selectedValue && selectedValue !== '' ? 'fa-download' : 'fa-list';
+                submitBtn.innerHTML = `<i class="fas ${icon}"></i> 執行匯入`;
+            });
+        }
+    }
+
+    // 頁面載入完成後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        updateImportDescription();
+    });
+</script>
+}
+
+<style>
+    .fas {
+        margin-right: 5px;
+    }
+    
+    .card {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .form-text small {
+        font-size: 0.875rem;
+    }
+</style>

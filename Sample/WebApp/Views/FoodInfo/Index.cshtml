@@ -1,0 +1,125 @@
+﻿@using WebApp.Data
+@model IEnumerable<FoodInfoEntity>
+
+@{
+    ViewData["Title"] = "營養成分資料列表";
+}
+
+<h1>營養成分資料列表</h1>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="foodId" class="form-label">選擇食品</label>
+                @await Component.InvokeAsync("FoodDropdown", new { 
+                    name = "foodId", 
+                    selectedValue = ViewBag.foodId,
+                    includeAllOption = true, 
+                    isRequired = false 
+                })
+            </div>
+            <div class="col-md-4">
+                <label for="analysisItemId" class="form-label">選擇分析項目</label>
+                @await Component.InvokeAsync("AnalysisItemDropdown", new { 
+                    name = "analysisItemId", 
+                    selectedValue = ViewBag.analysisItemId,
+                    includeAllOption = true, 
+                    isRequired = false 
+                })
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary me-2">搜尋</button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">清除條件</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>整合編號</th>
+                    <th>樣品名稱</th>
+                    <th>分析項目</th>
+                    <th>每100克含量</th>
+                    <th>含量單位</th>
+                    <th>資料類別</th>
+                    <th>食品分類</th>
+                    <th>樣本數</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            <code>@item.IntegratedNumber</code>
+                        </td>
+                        <td>
+                            <strong>@item.SampleName</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@item.AnalysisItem</span>
+                        </td>
+                        <td class="text-end">
+                            <strong>@item.ContentPer100g</strong>
+                        </td>
+                        <td>@item.ContentUnit</td>
+                        <td>
+                            <span class="badge bg-secondary">@item.DataCategory</span>
+                        </td>
+                        <td>@item.FoodCategory</td>
+                        <td>@item.SampleCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <p class="text-muted">共找到 @Model.Count() 筆營養成分資料 <small>（最多顯示 100 筆）</small></p>
+    </div>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">沒有找到資料</h4>
+        <p>目前沒有符合搜尋條件的營養成分資料。</p>
+        <hr>
+        <p class="mb-0">
+            請嘗試：
+            <ul>
+                <li>調整搜尋條件</li>
+                <li>選擇不同的食品或分析項目</li>
+                <li><a href="@Url.Action("Index")" class="alert-link">清除所有篩選條件</a></li>
+            </ul>
+        </p>
+    </div>
+}
+
+<div class="mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h5>搜尋說明</h5>
+            <ul>
+                <li><strong>選擇食品</strong>: 根據食品的整合編號和樣品名稱進行精確搜尋</li>
+                <li><strong>選擇分析項目</strong>: 根據分析項目名稱和資料類別進行精確搜尋</li>
+                <li><strong>文字搜尋</strong>: 僅根據分析項目名稱進行搜尋（向後相容）</li>
+                <li>多個條件可以同時使用</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h5>快速連結</h5>
+            <div class="d-grid gap-2">
+                <a href="@Url.Action("Index", "Food")" class="btn btn-outline-primary">管理食品資料</a>
+                <a href="@Url.Action("Index", "AnalysisItem")" class="btn btn-outline-secondary">管理分析項目</a>
+            </div>
+        </div>
+    </div>
+</div>
