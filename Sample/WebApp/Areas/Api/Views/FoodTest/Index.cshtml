@@ -1,0 +1,497 @@
+@{
+    ViewData["Title"] = "食品 API 測試";
+}
+
+<div class="container mt-4">
+    <h1>食品 API 測試介面</h1>
+    
+    <div class="alert alert-info">
+        <h5>API 基礎路徑</h5>
+        <code>@(Context.Request.Scheme)://@(Context.Request.Host)/api/foodapi</code>
+    </div>
+
+    <!-- 取得食品列表 -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">GET /api/foodapi - 取得食品列表</h5>
+        </div>
+        <div class="card-body">
+            <form id="getFoodsForm" class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">頁碼</label>
+                    <input type="number" class="form-control" name="page" value="1" min="1">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">每頁筆數</label>
+                    <input type="number" class="form-control" name="pageSize" value="10" min="1" max="100">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">整合編號</label>
+                    <input type="text" class="form-control" name="integratedNumber" placeholder="搜尋編號">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">樣品名稱</label>
+                    <input type="text" class="form-control" name="sampleName" placeholder="搜尋名稱">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">食品分類</label>
+                    <input type="text" class="form-control" name="foodCategory" placeholder="搜尋分類">
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> 查詢
+                    </button>
+                    <button type="button" class="btn btn-secondary ms-2" onclick="document.getElementById('getFoodsForm').reset();">
+                        <i class="bi bi-arrow-counterclockwise"></i> 重置
+                    </button>
+                </div>
+            </form>
+            <div id="getFoodsResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 取得單一食品 -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">GET /api/foodapi/{id} - 取得單一食品</h5>
+        </div>
+        <div class="card-body">
+            <form id="getFoodForm" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">食品 ID</label>
+                    <input type="number" class="form-control" name="id" placeholder="輸入食品 ID" required>
+                </div>
+                <div class="col-md-9 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-search"></i> 查詢
+                    </button>
+                </div>
+            </form>
+            <div id="getFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 新增食品 -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">POST /api/foodapi - 新增食品</h5>
+        </div>
+        <div class="card-body">
+            <form id="createFoodForm" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">整合編號 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                    <div class="form-text">必填欄位</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">樣品名稱 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="sampleName" required>
+                    <div class="form-text">必填欄位</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">樣品英文名稱</label>
+                    <input type="text" class="form-control" name="sampleEnglishName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">俗名</label>
+                    <input type="text" class="form-control" name="commonName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">食品分類</label>
+                    <input type="text" class="form-control" name="foodCategory">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">內容物描述</label>
+                    <textarea class="form-control" name="contentDescription" rows="3"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-plus-circle"></i> 新增食品
+                    </button>
+                    <button type="button" class="btn btn-secondary ms-2" onclick="document.getElementById('createFoodForm').reset();">
+                        <i class="bi bi-arrow-counterclockwise"></i> 清空表單
+                    </button>
+                </div>
+            </form>
+            <div id="createFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 更新食品 -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">PUT /api/foodapi/{id} - 更新食品</h5>
+        </div>
+        <div class="card-body">
+            <form id="updateFoodForm" class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">食品 ID <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="id" required>
+                    <div class="form-text">必填欄位</div>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">整合編號 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">樣品名稱 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="sampleName" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">樣品英文名稱</label>
+                    <input type="text" class="form-control" name="sampleEnglishName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">俗名</label>
+                    <input type="text" class="form-control" name="commonName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">食品分類</label>
+                    <input type="text" class="form-control" name="foodCategory">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">內容物描述</label>
+                    <textarea class="form-control" name="contentDescription" rows="3"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-info">
+                        <i class="bi bi-pencil-square"></i> 更新食品
+                    </button>
+                    <button type="button" class="btn btn-secondary ms-2" onclick="document.getElementById('updateFoodForm').reset();">
+                        <i class="bi bi-arrow-counterclockwise"></i> 清空表單
+                    </button>
+                </div>
+            </form>
+            <div id="updateFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 刪除食品 -->
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">DELETE /api/foodapi/{id} - 刪除食品</h5>
+        </div>
+        <div class="card-body">
+            <form id="deleteFoodForm" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">食品 ID</label>
+                    <input type="number" class="form-control" name="id" placeholder="輸入食品 ID" required>
+                </div>
+                <div class="col-md-9 d-flex align-items-end">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> 刪除
+                    </button>
+                </div>
+            </form>
+            <div id="deleteFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 檢查整合編號 -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">GET /api/foodapi/check-integrated-number - 檢查編號</h5>
+        </div>
+        <div class="card-body">
+            <form id="checkNumberForm" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">整合編號</label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">排除的食品 ID</label>
+                    <input type="number" class="form-control" name="excludeId" placeholder="選填">
+                    <div class="form-text">用於更新時排除自己</div>
+                </div>
+                <div class="col-md-5 d-flex align-items-end">
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="bi bi-check-circle"></i> 檢查
+                    </button>
+                </div>
+            </form>
+            <div id="checkNumberResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- 批次匯入食品 -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">POST /api/foodapi/batch-import - 批次匯入</h5>
+        </div>
+        <div class="card-body">
+            <form id="batchImportForm">
+                <div class="mb-3">
+                    <label class="form-label">JSON 資料 (陣列格式)</label>
+                    <textarea class="form-control font-monospace" name="jsonData" rows="10" placeholder='[
+  {
+    "integratedNumber": "A001",
+    "sampleName": "測試食品1",
+    "sampleEnglishName": "Test Food 1",
+    "commonName": "測試",
+    "foodCategory": "測試分類",
+    "contentDescription": "這是測試食品"
+  }
+]'></textarea>
+                    <div class="form-text">輸入 JSON 陣列格式的食品資料</div>
+                </div>
+                <button type="submit" class="btn btn-dark">
+                    <i class="bi bi-upload"></i> 批次匯入
+                </button>
+                <button type="button" class="btn btn-secondary ms-2" onclick="document.getElementById('batchImportForm').reset();">
+                    <i class="bi bi-arrow-counterclockwise"></i> 清空
+                </button>
+            </form>
+            <div id="batchImportResult" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const API_BASE = '/api/foodapi';
+    
+    // 顯示結果的函數
+    function showResult(elementId, data, isError = false) {
+        const element = document.getElementById(elementId);
+        const className = isError ? 'alert-danger' : 'alert-success';
+        
+        // 如果是食品列表,顯示表格
+        if (elementId === 'getFoodsResult' && !isError && data.data && Array.isArray(data.data)) {
+            let html = `
+                <div class="alert ${className}">
+                    <strong>訊息:</strong> ${data.message || '查詢成功'} 
+                    ${data.totalCount ? `(共 ${data.totalCount} 筆)` : ''}
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>整合編號</th>
+                                <th>樣品名稱</th>
+                                <th>英文名稱</th>
+                                <th>俗名</th>
+                                <th>食品分類</th>
+                                <th>建立時間</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+            
+            data.data.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.integratedNumber || ''}</td>
+                        <td>${item.sampleName || ''}</td>
+                        <td>${item.sampleEnglishName || ''}</td>
+                        <td>${item.commonName || ''}</td>
+                        <td>${item.foodCategory || ''}</td>
+                        <td>${item.createdAt ? new Date(item.createdAt).toLocaleString('zh-TW') : ''}</td>
+                    </tr>`;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>`;
+            
+            element.innerHTML = html;
+        } else {
+            // 其他情況顯示 JSON
+            element.innerHTML = `<div class="alert ${className}"><pre class="mb-0">${JSON.stringify(data, null, 2)}</pre></div>`;
+        }
+    }
+
+    // 取得食品列表
+    document.getElementById('getFoodsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams();
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim()) params.append(key, value);
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}?${params}`);
+            const result = await response.json();
+            showResult('getFoodsResult', result, !response.ok);
+        } catch (error) {
+            showResult('getFoodsResult', { error: error.message }, true);
+        }
+    });
+
+    // 取得單一食品
+    document.getElementById('getFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`);
+            const result = await response.json();
+            showResult('getFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('getFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // 新增食品
+    document.getElementById('createFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            data[key] = value.trim() || null;
+        }
+        
+        try {
+            const response = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            showResult('createFoodResult', result, !response.ok);
+            
+            if (response.ok) {
+                e.target.reset();
+            }
+        } catch (error) {
+            showResult('createFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // 更新食品
+    document.getElementById('updateFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            if (key !== 'id') {
+                data[key] = value.trim() || null;
+            }
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            showResult('updateFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('updateFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // 刪除食品
+    document.getElementById('deleteFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        
+        if (!confirm('確定要刪除此食品嗎?此操作無法復原!')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+            const result = await response.json();
+            showResult('deleteFoodResult', result, !response.ok);
+            
+            if (response.ok) {
+                e.target.reset();
+            }
+        } catch (error) {
+            showResult('deleteFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // 檢查整合編號
+    document.getElementById('checkNumberForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams();
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim()) params.append(key, value);
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/check-integrated-number?${params}`);
+            const result = await response.json();
+            showResult('checkNumberResult', result, !response.ok);
+        } catch (error) {
+            showResult('checkNumberResult', { error: error.message }, true);
+        }
+    });
+
+    // 批次匯入
+    document.getElementById('batchImportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const jsonData = formData.get('jsonData');
+        
+        try {
+            const foods = JSON.parse(jsonData);
+            
+            if (!Array.isArray(foods)) {
+                throw new Error('JSON 資料必須是陣列格式');
+            }
+            
+            const response = await fetch(`${API_BASE}/batch-import`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(foods)
+            });
+            const result = await response.json();
+            showResult('batchImportResult', result, !response.ok);
+            
+            if (response.ok) {
+                e.target.reset();
+            }
+        } catch (error) {
+            showResult('batchImportResult', { error: error.message }, true);
+        }
+    });
+</script>
+}
+
+<style>
+    .card-header h5 {
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+    }
+    
+    pre {
+        max-height: 400px;
+        overflow-y: auto;
+        font-size: 0.85em;
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.25rem;
+    }
+    
+    .alert {
+        margin-bottom: 0;
+    }
+    
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    
+    .font-monospace {
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+    }
+    
+    .form-text {
+        font-size: 0.85em;
+    }
+</style>
