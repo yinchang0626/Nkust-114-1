@@ -1,0 +1,58 @@
+﻿@using WebApp.Data
+@model AnalysisItemEntity
+
+@{
+    ViewData["Title"] = "分析項目詳細資料";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>分析項目詳細資料</h1>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@Model.Name</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9">@Model.Id</dd>
+
+                    <dt class="col-sm-3">資料類別</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-info fs-6">@Model.DataCategory</span>
+                    </dd>
+
+                    <dt class="col-sm-3">分析項目名稱</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> 返回列表
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">相關操作</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Index", "FoodInfo", new { analysisItem = Model.Name })" 
+                       class="btn btn-outline-primary">
+                        查看使用此分析項目的食品
+                    </a>
+                    <a href="@Url.Action("Index", new { dataCategory = Model.DataCategory })" 
+                       class="btn btn-outline-secondary">
+                        查看同類別的分析項目
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

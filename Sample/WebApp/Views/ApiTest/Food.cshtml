@@ -1,0 +1,327 @@
+@{
+    ViewData["Title"] = "?? API ??";
+}
+
+<div class="container mt-4">
+    <h1>?? API ????</h1>
+    
+    <div class="alert alert-info">
+        <h5>API ????</h5>
+        <code>@(Context.Request.Scheme)://@(Context.Request.Host)/api/foodapi</code>
+    </div>
+
+    <!-- ?????? -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">GET /api/foodapi - ??????</h5>
+        </div>
+        <div class="card-body">
+            <form id="getFoodsForm" class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">??</label>
+                    <input type="number" class="form-control" name="page" value="1" min="1">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">????</label>
+                    <input type="number" class="form-control" name="pageSize" value="10" min="1" max="100">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">????</label>
+                    <input type="text" class="form-control" name="integratedNumber" placeholder="??????">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">????</label>
+                    <input type="text" class="form-control" name="sampleName" placeholder="??????">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">??</button>
+                </div>
+            </form>
+            <div id="getFoodsResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ?????? -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">GET /api/foodapi/{id} - ??????</h5>
+        </div>
+        <div class="card-body">
+            <form id="getFoodForm" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">?? ID</label>
+                    <input type="number" class="form-control" name="id" placeholder="???? ID" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success">??</button>
+                </div>
+            </form>
+            <div id="getFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ???? -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">POST /api/foodapi - ????</h5>
+        </div>
+        <div class="card-body">
+            <form id="createFoodForm" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">???? <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">???? <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="sampleName" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">??????</label>
+                    <input type="text" class="form-control" name="sampleEnglishName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">??</label>
+                    <input type="text" class="form-control" name="commonName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">????</label>
+                    <input type="text" class="form-control" name="foodCategory">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">?????</label>
+                    <textarea class="form-control" name="contentDescription" rows="3"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-warning">????</button>
+                </div>
+            </form>
+            <div id="createFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ???? -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">PUT /api/foodapi/{id} - ????</h5>
+        </div>
+        <div class="card-body">
+            <form id="updateFoodForm" class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">?? ID <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="id" required>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">???? <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">???? <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="sampleName" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">??????</label>
+                    <input type="text" class="form-control" name="sampleEnglishName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">??</label>
+                    <input type="text" class="form-control" name="commonName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">????</label>
+                    <input type="text" class="form-control" name="foodCategory">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">?????</label>
+                    <textarea class="form-control" name="contentDescription" rows="3"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-info">????</button>
+                </div>
+            </form>
+            <div id="updateFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ???? -->
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">DELETE /api/foodapi/{id} - ????</h5>
+        </div>
+        <div class="card-body">
+            <form id="deleteFoodForm" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">?? ID</label>
+                    <input type="number" class="form-control" name="id" placeholder="???? ID" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-danger">??</button>
+                </div>
+            </form>
+            <div id="deleteFoodResult" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ?????? -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">GET /api/foodapi/check-integrated-number - ??????</h5>
+        </div>
+        <div class="card-body">
+            <form id="checkNumberForm" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">????</label>
+                    <input type="text" class="form-control" name="integratedNumber" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">????? ID</label>
+                    <input type="number" class="form-control" name="excludeId" placeholder="??">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-secondary">??</button>
+                </div>
+            </form>
+            <div id="checkNumberResult" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const API_BASE = '/api/foodapi';
+    
+    // ?????????
+    function showResult(elementId, data, isError = false) {
+        const element = document.getElementById(elementId);
+        const className = isError ? 'alert-danger' : 'alert-success';
+        element.innerHTML = `<div class="alert ${className}"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+    }
+
+    // ??????
+    document.getElementById('getFoodsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams();
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim()) params.append(key, value);
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}?${params}`);
+            const result = await response.json();
+            showResult('getFoodsResult', result, !response.ok);
+        } catch (error) {
+            showResult('getFoodsResult', { error: error.message }, true);
+        }
+    });
+
+    // ??????
+    document.getElementById('getFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`);
+            const result = await response.json();
+            showResult('getFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('getFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // ????
+    document.getElementById('createFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+            const response = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            showResult('createFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('createFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // ????
+    document.getElementById('updateFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        const data = Object.fromEntries(formData.entries());
+        delete data.id;
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            showResult('updateFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('updateFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // ????
+    document.getElementById('deleteFoodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const id = formData.get('id');
+        
+        if (!confirm('???????????????????')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+            const result = await response.json();
+            showResult('deleteFoodResult', result, !response.ok);
+        } catch (error) {
+            showResult('deleteFoodResult', { error: error.message }, true);
+        }
+    });
+
+    // ??????
+    document.getElementById('checkNumberForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams();
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim()) params.append(key, value);
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/check-integrated-number?${params}`);
+            const result = await response.json();
+            showResult('checkNumberResult', result, !response.ok);
+        } catch (error) {
+            showResult('checkNumberResult', { error: error.message }, true);
+        }
+    });
+</script>
+}
+
+<style>
+    .card-header h5 {
+        font-family: 'Courier New', monospace;
+    }
+    
+    pre {
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 0.9em;
+    }
+    
+    .alert {
+        margin-bottom: 0;
+    }
+</style>

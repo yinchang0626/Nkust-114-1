@@ -1,0 +1,73 @@
+﻿@using WebApp.Data
+@model FoodEntity
+
+@{
+    ViewData["Title"] = "食品詳細資料";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>食品詳細資料</h1>
+        
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">@Model.SampleName</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9">@Model.Id</dd>
+
+                    <dt class="col-sm-3">整合編號</dt>
+                    <dd class="col-sm-9">
+                        <code class="fs-6">@Model.IntegratedNumber</code>
+                    </dd>
+
+                    <dt class="col-sm-3">樣品名稱</dt>
+                    <dd class="col-sm-9">
+                        <strong>@Model.SampleName</strong>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> 返回列表
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">相關操作</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Index", "FoodInfo", new { id = Model.IntegratedNumber })" 
+                       class="btn btn-primary">
+                        查看營養成分詳細資料
+                    </a>
+                    <a href="@Url.Action("Index", new { integratedNumber = Model.IntegratedNumber.Substring(0, Math.Min(3, Model.IntegratedNumber.Length)) })" 
+                       class="btn btn-outline-secondary">
+                        查看相似編號的食品
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">食品資訊</h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <strong>整合編號說明：</strong><br>
+                    整合編號是此食品在營養成分資料庫中的唯一識別碼，
+                    可用於查詢該食品的完整營養分析資料。
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

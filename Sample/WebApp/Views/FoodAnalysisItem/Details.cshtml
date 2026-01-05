@@ -1,0 +1,205 @@
+﻿@using WebApp.Data
+@model FoodAnalysisItemEntity
+
+@{
+    ViewData["Title"] = "食品分析項目詳細資料";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>食品分析項目詳細資料</h1>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@Model.Food.SampleName - @Model.AnalysisItem.Name</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>食品資訊</h6>
+                        <dl class="row">
+                            <dt class="col-sm-5">整合編號</dt>
+                            <dd class="col-sm-7"><code>@Model.Food.IntegratedNumber</code></dd>
+                            
+                            <dt class="col-sm-5">樣品名稱</dt>
+                            <dd class="col-sm-7"><strong>@Model.Food.SampleName</strong></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>分析項目</h6>
+                        <dl class="row">
+                            <dt class="col-sm-5">分析項目</dt>
+                            <dd class="col-sm-7"><span class="badge bg-info">@Model.AnalysisItem.Name</span></dd>
+                            
+                            <dt class="col-sm-5">資料類別</dt>
+                            <dd class="col-sm-7"><span class="badge bg-secondary">@Model.AnalysisItem.DataCategory</span></dd>
+                        </dl>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>營養成分數據</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">每100克含量</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.ContentPer100g.HasValue)
+                                {
+                                    <strong class="text-primary">@Model.ContentPer100g.Value.ToString("N4")</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">未測定</span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-6">每單位含量</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.ContentPerUnit.HasValue)
+                                {
+                                    <text>@Model.ContentPerUnit.Value.ToString("N4")</text>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-6">每單位重含量</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.ContentPerUnitWeight.HasValue)
+                                {
+                                    <text>@Model.ContentPerUnitWeight.Value.ToString("N4")</text>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">含量單位</dt>
+                            <dd class="col-sm-6">@(Model.ContentUnit ?? "-")</dd>
+                            
+                            <dt class="col-sm-6">標準差</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.StandardDeviation.HasValue)
+                                {
+                                    <text>@Model.StandardDeviation.Value.ToString("N4")</text>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-6">樣本數</dt>
+                            <dd class="col-sm-6">@(Model.SampleCount?.ToString() ?? "-")</dd>
+                        </dl>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>其他資訊</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">每單位重</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.UnitWeight.HasValue)
+                                {
+                                    <span>@Model.UnitWeight.Value.ToString("N2") g</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-6">廢棄率</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.WasteRate.HasValue)
+                                {
+                                    <span>@Model.WasteRate.Value.ToString("N2")%</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">建立時間</dt>
+                            <dd class="col-sm-6">@Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</dd>
+                            
+                            <dt class="col-sm-6">狀態</dt>
+                            <dd class="col-sm-6">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">啟用</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">停用</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">返回列表</a>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">相關操作</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Index", new { foodId = Model.FoodId })" 
+                       class="btn btn-outline-primary">
+                        查看此食品的所有分析項目
+                    </a>
+                    <a href="@Url.Action("Index", new { analysisItemId = Model.AnalysisItemId })" 
+                       class="btn btn-outline-secondary">
+                        查看此分析項目的所有食品
+                    </a>
+                    <a href="@Url.Action("Details", "Food", new { id = Model.FoodId })" 
+                       class="btn btn-outline-info">
+                        食品詳細資料
+                    </a>
+                    <a href="@Url.Action("Details", "AnalysisItem", new { id = Model.AnalysisItemId })" 
+                       class="btn btn-outline-warning">
+                        分析項目詳細資料
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">數據說明</h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <p><strong>每100克含量</strong>：食品每100克重量中該營養成分的含量</p>
+                    <p><strong>每單位含量</strong>：以食品的慣用單位計算的營養成分含量</p>
+                    <p><strong>標準差</strong>：測量值的變異程度</p>
+                    <p><strong>樣本數</strong>：用於分析的樣品數量</p>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
