@@ -1,0 +1,26 @@
+@using WebApp.Models.ViewComponents
+@model DropdownViewComponentModel
+
+@{
+    var selectList = ViewBag.SelectList as IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+}
+
+<select name="@Model.Name" 
+        id="@Model.Id" 
+        class="@Model.CssClass"
+        @(Model.IsRequired ? Html.Raw("required") : Html.Raw(""))>
+    @if (selectList != null)
+    {
+        @foreach (var item in selectList)
+        {
+            @if (item.Selected)
+            {
+                <option value="@item.Value" selected>@item.Text</option>
+            }
+            else
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        }
+    }
+</select>
